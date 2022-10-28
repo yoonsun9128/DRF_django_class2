@@ -32,3 +32,8 @@ class CommentDetailView(APIView):
         pass
     def delete (self, request, commnet_id):
         pass
+
+# 좋아요 카운트
+class LikeView(APIView):
+    def post (self, request):
+        pass
