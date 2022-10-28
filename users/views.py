@@ -23,7 +23,8 @@ class MockView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         print(request.user)
-        user = request.user
-        user.is_admin = True
-        user.save()
+        # 어드민 권한을 주는 부분 하지만 이부분은 디비가 변경되는 부분으로 post 방식이 옳바르다
+        # user = request.user
+        # user.is_admin = True
+        # user.save()
         return Response("get 요청")
