@@ -9,7 +9,7 @@ class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     content = models.TextField()
-    img = models.ImageField(upload_to = '%Y/%m/')
+    img = models.ImageField(null=True, upload_to = '%Y/%m/')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 

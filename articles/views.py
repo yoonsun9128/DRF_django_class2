@@ -2,13 +2,23 @@ from ast import Delete
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from articles.models import Article
+from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer
 
 # 게시글 보여주기 등록하기
 class ArticlesView(APIView):
     def get (self, request):
-        pass
+        articles = Article.objects.all()
+        serializer = ArticleListSerializer(articles, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def post (self, request):
-        pass
+        print(request.user)
+        serializer = ArticleCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors)
 
 # 게시글 상세페이지 및 수정 삭제
 class ArticleDetailView(APIView):
