@@ -22,4 +22,8 @@ class MockView(APIView):
     # 로그인 되어있을때만 가능하게끔 설정함
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
+        print(request.user)
+        user = request.user
+        user.is_admin = True
+        user.save()
         return Response("get 요청")
