@@ -1,4 +1,3 @@
-from os import stat
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -90,4 +89,11 @@ class CommentDetailView(APIView):
 # 좋아요 카운트
 class LikeView(APIView):
     def post (self, request, article_id):
-        pass
+        article= get_object_or_404(Article, id=article_id)
+        print(article.likes)
+        if request.user in article.likes.all():
+            article.likes.remove(request.user)
+            return Response("unfollow 했습니다", status=status.HTTP_200_OK)
+        else:
+            article.likes.add(request.user)
+            return Response("follow 했습니다.", status=status.HTTP_200_OK)
