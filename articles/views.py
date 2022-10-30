@@ -1,4 +1,5 @@
-
+from os import stat
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -18,17 +19,29 @@ class ArticlesView(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # 게시글 상세페이지 및 수정 삭제
 class ArticleDetailView(APIView):
     def get (self, request, article_id):
-        article = Article.objects.get(pk=article_id)
+        # article = Article.objects.get(pk=article_id)
+        article= get_object_or_404(Article, id=article_id)
         serializer = ArticleSerializer(article)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def put (self, request, article_id):
-        pass
+        article= get_object_or_404(Article, id=article_id)
+        if request.user == article.user:
+            serializer = ArticleCreateSerializer(article, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("권한이 없습니다", status=status.HTTP_403_FORBIDDEN)
+
     def delete (self, request, article_id):
+        article= get_object_or_404(Article, id=article_id)
         pass
 
 # 댓글창

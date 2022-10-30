@@ -139,7 +139,7 @@ AUTH_USER_MODEL = 'users.User'
 
 SIMPLE_JWT = {
     # 토근으로 로그인이 유지되는 시간
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=700),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
