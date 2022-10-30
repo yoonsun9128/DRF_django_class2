@@ -38,11 +38,16 @@ class ArticleDetailView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            # 본인 또는 운영자인지 확인 에러/401은 로그인이 되었는지에 대한 에러
             return Response("권한이 없습니다", status=status.HTTP_403_FORBIDDEN)
 
     def delete (self, request, article_id):
         article= get_object_or_404(Article, id=article_id)
-        pass
+        if request.user == article.user:
+            article.delete()
+            return Response("삭제되었음!", status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("권한이 없습니다", status=status.HTTP_403_FORBIDDEN)
 
 # 댓글창
 class CommnetView(APIView):
