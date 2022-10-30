@@ -3,8 +3,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from articles.models import Article
-from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer
+from articles.models import Article, Comment
+from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer, CommentSerializer
 
 # 게시글 보여주기 등록하기
 class ArticlesView(APIView):
@@ -52,7 +52,10 @@ class ArticleDetailView(APIView):
 # 댓글창
 class CommnetView(APIView):
     def get (self, request, article_id):
-        pass
+        article = Article.objects.get(id=article_id)
+        commnets = article.comment_set.all()
+        serializer = CommentSerializer(commnets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def post (self, request, article_id):
         pass
 
