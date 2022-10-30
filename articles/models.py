@@ -12,6 +12,8 @@ class Article(models.Model):
     img = models.ImageField(null=True, upload_to = '%Y/%m/')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    # related_name을 설정해줘서 다른 필드 부분과 곁치는걸 방지하기 위해
+    likes = models.ManyToManyField(User, related_name="like_articles")
 
     def __str__(self):
         return str(self.title)
