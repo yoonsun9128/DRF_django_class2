@@ -1,4 +1,4 @@
-from ast import Delete
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -23,7 +23,9 @@ class ArticlesView(APIView):
 # 게시글 상세페이지 및 수정 삭제
 class ArticleDetailView(APIView):
     def get (self, request, article_id):
-        pass
+        article = Article.objects.get(pk=article_id)
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
     def put (self, request, article_id):
         pass
     def delete (self, request, article_id):
