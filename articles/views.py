@@ -64,16 +64,30 @@ class CommnetView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        pass
 
 # 댓글 수정 삭제
 class CommentDetailView(APIView):
-    def put (self, request, commnet_id):
-        pass
-    def delete (self, request, commnet_id):
-        pass
+    def put (self, request, article_id, commnet_id):
+        comment= get_object_or_404(Comment, id=commnet_id)
+        if request.user == comment.user:
+            serializer = CommentCreateSerializer(comment, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # 본인 또는 운영자인지 확인 에러/401은 로그인이 되었는지에 대한 에러
+            return Response("권한이 없습니다", status=status.HTTP_403_FORBIDDEN)
+    def delete (self, request, article_id, commnet_id):
+        comment= get_object_or_404(Comment, id=commnet_id)
+        if request.user == comment.user:
+            comment.delete()
+            return Response("삭제되었음!", status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("권한이 없습니다", status=status.HTTP_403_FORBIDDEN)
 
 # 좋아요 카운트
 class LikeView(APIView):
-    def post (self, request):
+    def post (self, request, article_id):
         pass
