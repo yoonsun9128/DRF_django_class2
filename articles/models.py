@@ -1,4 +1,5 @@
 
+from pyexpat import model
 from django.db import models
 from users.models import User
 
@@ -14,3 +15,13 @@ class Article(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    content = models.TextField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.content)
