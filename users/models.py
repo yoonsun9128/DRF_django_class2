@@ -42,6 +42,8 @@ class User(AbstractBaseUser):
         unique=True,
     )
     nickname = models.CharField(max_length=10, null=True)
+    # 팔로워 모델 추가
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
