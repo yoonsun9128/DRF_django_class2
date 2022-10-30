@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from articles.models import Article, Comment
-from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer, CommentSerializer
+from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer, CommentSerializer, CommentCreateSerializer
 
 # 게시글 보여주기 등록하기
 class ArticlesView(APIView):
@@ -51,12 +51,19 @@ class ArticleDetailView(APIView):
 
 # 댓글창
 class CommnetView(APIView):
+    # 리스트 보이기
     def get (self, request, article_id):
         article = Article.objects.get(id=article_id)
         commnets = article.comment_set.all()
         serializer = CommentSerializer(commnets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     def post (self, request, article_id):
+        serializer = CommentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, article_id=article_id)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         pass
 
 # 댓글 수정 삭제

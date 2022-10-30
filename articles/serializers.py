@@ -32,3 +32,9 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        # fields 안에 하나의 인자값만 넣을 경우 꼭 마지막에 ,를 넣어야 한다. 넣지 않으면 string으로 받아드려서 오류남
+        fields = ('content',)
