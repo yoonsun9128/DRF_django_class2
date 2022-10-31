@@ -24,6 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):

@@ -1,12 +1,20 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from users import serializers
 from users.models import User
-from users.serializers import UserSerializer,CustomTokenObtainPairSerializer
+from users.serializers import UserSerializer,CustomTokenObtainPairSerializer, UserProfileSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.generics import get_object_or_404
 
 # Create your views here.
+class ProfileView(APIView):
+    # 로그인 안해도 모든 프로필은 볼 수 있게 설정
+    def get (sefl, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
+
 class UserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
