@@ -1,7 +1,6 @@
-
-from pyexpat import model
 from django.db import models
 from users.models import User
+from django.urls import reverse
 
 # Create your models here.
 class Article(models.Model):
@@ -15,8 +14,12 @@ class Article(models.Model):
     # related_name을 설정해줘서 다른 필드 부분과 곁치는걸 방지하기 위해
     likes = models.ManyToManyField(User, related_name="like_articles")
 
+    def get_absolute_url(self):
+        return reverse('articels:Article_detail', kwargs={'article_id':self.id})
+
     def __str__(self):
         return str(self.title)
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
