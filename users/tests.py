@@ -6,7 +6,7 @@ from users.models  import User
 # Create your tests here.
 class UserRegistrationAPITestCase(APITestCase):
     def test_registration(self):
-        url = reverse("user:signupview")
+        url = reverse("user:signup")
         user_data = {
             "email":"test@test.com",
             "password":"123"
@@ -25,6 +25,7 @@ class UserRegistrationAPITestCase(APITestCase):
     #     print(response.data)
     #     self.assertEqual(response.status_code, 201)
 
+# 싸이클을 이용해서 디비가 초기화 되는걸 방지할 수 있음
 class LoginUserTest(APITestCase):
     def setUp(self):
         self.data = {'email':'test@test.com', 'password':'123'}
@@ -38,7 +39,7 @@ class LoginUserTest(APITestCase):
     def test_get_user_data(self):
         access_token = self.client.post(reverse('user:token_obtain_pair'), self.data).data['access']
         response = self.client.get(
-            path=reverse('user:signupview'),
+            path=reverse('user:signup'),
             HTTP_AUTHORIZATION=f'Bearer {access_token}'
             )
         # print("확인하기",response.data)
