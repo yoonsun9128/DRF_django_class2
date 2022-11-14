@@ -38,12 +38,12 @@ class ArticleCreateTest(APITestCase):
 
     # 로그인인 안한 상태에서 401 에러 작동
     def test_fail_if_not_logged_in(self):
-        url = reverse('articels:Articlesview')
+        url = reverse('articles:article')
         response = self.client.post(url, self.article_data)
         self.assertEqual(response.status_code, 401)
-    def test_create_articel(self):
+    def test_create_article(self):
         response = self.client.post(
-            path=reverse('articels:Articlesview'),
+            path=reverse('articles:article'),
             data=self.article_data,
             HTTP_AUTHORIZATION=f'Bearer {self.access_token}'
         )
@@ -60,7 +60,7 @@ def test_create_article_with_image(self):
 
     # 전송
     response = self.client.post(
-            path=reverse('articels:Articlesview'),
+            path=reverse('articles:article'),
             data=encode_multipart(data = self.article_data, boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
             HTTP_AUTHORIZATION=f'Bearer {self.access_token}'
